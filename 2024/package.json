@@ -1,0 +1,23 @@
+{
+  "name": "aoc-2024",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "npm run clean && tsc && npm run copy-files",
+    "start-01": "npm run start && node dist/01/part-one.js && node dist/01/part-two.js",
+    "start-02": "npm run start && node dist/02/part-one.js && node dist/02/part-two.js",
+    "clean": "rimraf dist",
+    "copy-files": "copyfiles -u 1 src/**/*.txt dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "copyfiles": "^2.4.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.2"
+  }
+}

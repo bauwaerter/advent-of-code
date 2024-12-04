@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "incremental": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "strict": true
+  }
+}
