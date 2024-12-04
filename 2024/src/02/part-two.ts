@@ -14,7 +14,14 @@ function checkNumber(num1: number, num2: number) {
   return true;
 }
 
-async function processRow(row: number[]): Promise<boolean> {
+async function processRow(
+  row: number[],
+  numberOfInvalidNumbers = 0
+): Promise<boolean> {
+  if (numberOfInvalidNumbers > 1) {
+    return Promise.resolve(false);
+  }
+
   if (row.length === 0) {
     return Promise.resolve(false);
   }
@@ -23,17 +30,19 @@ async function processRow(row: number[]): Promise<boolean> {
     return Promise.resolve(true);
   }
 
-  let increaseOrDecrease = null;
-  let isRowValid = true;
-  let numberOfInvalidNumbers = 0;
-  for (let i = 0; i < row.length - 1; i++) {
-    const firstNumber = row[i];
-    const secondNumber = row[i + 1];
+  let leftIndex = 0;
+  let rightIndex = 1;
 
-    if (increaseOrDecrease === null) {
-      increaseOrDecrease =
-        firstNumber < secondNumber ? Decision.Increase : Decision.Decrease;
-    }
+  let firstNumber = row[leftIndex];
+  let secondNumber = row[rightIndex];
+
+  let increaseOrDecrease =
+    firstNumber < secondNumber ? Decision.Increase : Decision.Decrease;
+  let isRowValid = true;
+
+  while (rightIndex < row.length) {
+    firstNumber = row[leftIndex];
+    secondNumber = row[rightIndex];
 
     if (increaseOrDecrease === Decision.Increase) {
       isRowValid = firstNumber < secondNumber;
@@ -45,14 +54,36 @@ async function processRow(row: number[]): Promise<boolean> {
 
     if (!isNumberValid || !isRowValid) {
       numberOfInvalidNumbers++;
-    }
 
-    if ((!isNumberValid || !isRowValid) && numberOfInvalidNumbers > 1) {
-      return Promise.resolve(false);
+      if (numberOfInvalidNumbers > 1) {
+        return Promise.resolve(false);
+      }
+
+      const removeLeftArray = row.filter((_, index) => index !== leftIndex - 1);
+      const removeMiddleArray = row.filter((_, index) => index !== leftIndex);
+      const removeRightArray = row.filter((_, index) => index !== rightIndex);
+
+      const all = await Promise.all([
+        processRow(removeLeftArray, numberOfInvalidNumbers),
+        processRow(removeMiddleArray, numberOfInvalidNumbers),
+        processRow(removeRightArray, numberOfInvalidNumbers),
+      ]);
+
+      if (
+        numberOfInvalidNumbers <= 1 &&
+        all.some((result) => result === true)
+      ) {
+        return Promise.resolve(true);
+      }
+
+      rightIndex++;
+    } else {
+      leftIndex = rightIndex;
+      rightIndex++;
     }
   }
 
-  return Promise.resolve(isRowValid && numberOfInvalidNumbers <= 1);
+  return Promise.resolve(true);
 }
 
 async function main() {
