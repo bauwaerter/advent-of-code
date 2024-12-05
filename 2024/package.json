@@ -8,6 +8,7 @@
     "start-01": "npm run start && node dist/01/part-one.js && node dist/01/part-two.js",
     "start-02": "npm run start && node dist/02/part-one.js && node dist/02/part-two.js",
     "start-03": "npm run start && node dist/03/part-one.js && node dist/03/part-two.js",
+    "start-04": "npm run start && node dist/04/part-one.js && node dist/04/part-two.js",
     "clean": "rimraf dist",
     "copy-files": "copyfiles -u 1 src/**/*.txt dist",
     "test": "echo \"Error: no test specified\" && exit 1"
